@@ -151,24 +151,6 @@ class TestPath(TestCase):
         self.assertFalse(Path(td.path, 'Dir 1').is_link)
         td.clean()
 
-    # TODO: Move to File()
-    # def test_open(self):
-    #     td = TempDirectory()
-    #
-    #     # Test read
-    #     fh = Path(td.path, 'test_file').open('r')
-    #     self.assertEqual(fh.read(), "test")
-    #     fh.close()
-    #
-    #     # Test write
-    #     fh = Path(td.path, 'test_file_2.txt').open('w')
-    #     fh.write("test")
-    #     fh.close()
-    #     self.assertIn(("test_file_2.txt", 4, "test"), td.contents)
-    #
-    #     td.clean()
-
-
     def test_is_dir(self):
         td = TempDirectory()
         self.assertFalse(Path(td.path, 'test_file').is_dir)
@@ -239,14 +221,6 @@ class TestPath(TestCase):
         self.assertEqual(Path('a\\bc\\d').split(), ['a', 'bc', 'd'])
 
 
-    # TODO: Move to File
-    # def test_touch(self):
-    #     td = TempDirectory()
-    #     Path(td.path, 'new_file').touch()
-    #     self.assertIn(('new_file', 0, ''), td.contents)
-    #     td.clean()
-
-
     def test_files(self):
         td = TempDirectory()
         self.assertEqual(set(Path(td.path, 'Dir 2').files),
@@ -282,8 +256,3 @@ class TestPath(TestCase):
             self.assertFalse(Path(td.path, 'test_file').samefile(Path(td.path, 'unknown_file.txt')))
             td.clean()
 
-
-    # TODO: Move to File()
-    # def test_md5(self):
-    #     td = TempDirectory()
-    #     self.assertEqual(Path(td.path, 'test_file').md5, 'AAAA')
