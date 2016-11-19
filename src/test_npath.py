@@ -106,8 +106,8 @@ class TestPath(TestCase):
             Path('a/b'),
         ])
 
-        self.assertIn(Path('a/b/c', s))
-        self.assertNptIn(Path('a/b/c/d', s))
+        self.assertIn(Path('a/b/c'), s)
+        self.assertNotIn(Path('a/b/c/d'), s)
 
 
     def test_abs_path(self):
@@ -130,7 +130,6 @@ class TestPath(TestCase):
 
     def test_parent(self):
         self.assertEqual(Path('a/b/c').parent, Path('a/b'))
-        self.assertEqual(Path('a/b/c').dirname, Path('a/b'))
 
 
     def test_exists(self):
@@ -152,28 +151,29 @@ class TestPath(TestCase):
         self.assertFalse(Path(td.path, 'Dir 1').is_link)
         td.clean()
 
-    def test_open(self):
-        td = TempDirectory()
-
-        # Test read
-        fh = Path(td.path, 'test_file').open('r')
-        self.assertEqual(fh.read(), "test")
-        fh.close()
-
-        # Test write
-        fh = Path(td.path, 'test_file_2.txt').open('w')
-        fh.write("test")
-        fh.close()
-        self.assertIn(("test_file_2.txt", 4, "test"), td.contents)
-
-        td.clean()
+    # TODO: Move to File()
+    # def test_open(self):
+    #     td = TempDirectory()
+    #
+    #     # Test read
+    #     fh = Path(td.path, 'test_file').open('r')
+    #     self.assertEqual(fh.read(), "test")
+    #     fh.close()
+    #
+    #     # Test write
+    #     fh = Path(td.path, 'test_file_2.txt').open('w')
+    #     fh.write("test")
+    #     fh.close()
+    #     self.assertIn(("test_file_2.txt", 4, "test"), td.contents)
+    #
+    #     td.clean()
 
 
     def test_is_dir(self):
         td = TempDirectory()
-        self.assertFalse(Path(td.path, 'test_file').is_file)
-        self.assertTrue(Path(td.path, 'Dir 1').is_file)
-        self.assertFalse(Path(td.path, 'missing_file').is_file)
+        self.assertFalse(Path(td.path, 'test_file').is_dir)
+        self.assertTrue(Path(td.path, 'Dir 1').is_dir)
+        self.assertFalse(Path(td.path, 'missing_file').is_dir)
         td.clean()
 
 
@@ -220,7 +220,7 @@ class TestPath(TestCase):
 
 
     def test_prefix(self):
-        self.assertEqual(Path('a/b/file.txt').prefix, 'a/b')
+        self.assertEqual(Path('a/b/file.txt').prefix, 'a/b/file')
 
 
     def test_ext(self):
@@ -239,48 +239,51 @@ class TestPath(TestCase):
         self.assertEqual(Path('a\\bc\\d').split(), ['a', 'bc', 'd'])
 
 
-    def test_touch(self):
-        td = TempDirectory()
-        Path(td.path, 'new_file').touch()
-        self.assertIn(('new_file', 0, ''), td.contents)
-        td.clean()
+    # TODO: Move to File
+    # def test_touch(self):
+    #     td = TempDirectory()
+    #     Path(td.path, 'new_file').touch()
+    #     self.assertIn(('new_file', 0, ''), td.contents)
+    #     td.clean()
 
 
     def test_files(self):
         td = TempDirectory()
-        set.assertEqual(set(Path(td.path, 'Dir 2').files),
-                        set([Path(td.path, 'Dir 2', 'File C'),
-                             Path(td.path, 'Dir 2', 'File D.txt'),
-                             ]))
+        self.assertEqual(set(Path(td.path, 'Dir 2').files),
+                         set([Path(td.path, 'Dir 2', 'File C'),
+                              Path(td.path, 'Dir 2', 'File D.txt'),
+                              ]))
         td.clean()
 
 
     def test_dirs(self):
         td = TempDirectory()
-        set.assertEqual(set(Path(td.path, 'Dir 2').dirs),
-                        set([Path(td.path, 'Dir 2', 'Dir 3'),
-                             ]))
+        self.assertEqual(set(Path(td.path, 'Dir 2').dirs),
+                         set([Path(td.path, 'Dir 2', 'Dir 3'),
+                              ]))
         td.clean()
 
 
     def test_all(self):
         td = TempDirectory()
-        set.assertEqual(set(Path(td.path, 'Dir 2').all),
-                        set([Path(td.path, 'Dir 2', 'File C'),
-                             Path(td.path, 'Dir 2', 'File D.txt'),
-                             Path(td.path, 'Dir 2', 'Dir 3'),
-                             ]))
+        self.assertEqual(set(Path(td.path, 'Dir 2').all),
+                         set([Path(td.path, 'Dir 2', 'File C'),
+                              Path(td.path, 'Dir 2', 'File D.txt'),
+                              Path(td.path, 'Dir 2', 'Dir 3'),
+                              ]))
         td.clean()
 
 
     def test_samefile(self):
-        td = TempDirectory()
-        self.assertTrue(Path(td.path, 'test_file').samefile(Path(td.path, 'test_file')))
-        self.assertFalse(Path(td.path, 'test_file').samefile(Path(td.path, 'Dir 2', 'Dir 3', 'test_file')))
-        self.assertFalse(Path(td.path, 'test_file').samefile(Path(td.path, 'unknown_file.txt')))
-        td.clean()
+        if hasattr(os.path, 'samefile'):
+            td = TempDirectory()
+            self.assertTrue(Path(td.path, 'test_file').samefile(Path(td.path, 'test_file')))
+            self.assertFalse(Path(td.path, 'test_file').samefile(Path(td.path, 'Dir 2', 'Dir 3', 'test_file')))
+            self.assertFalse(Path(td.path, 'test_file').samefile(Path(td.path, 'unknown_file.txt')))
+            td.clean()
 
 
-    def test_md5(self):
-        td = TempDirectory()
-        self.assertEqual(Path(td.path, 'test_file').md5, 'AAAA')
+    # TODO: Move to File()
+    # def test_md5(self):
+    #     td = TempDirectory()
+    #     self.assertEqual(Path(td.path, 'test_file').md5, 'AAAA')
