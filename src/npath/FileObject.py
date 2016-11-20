@@ -5,6 +5,7 @@ from . import RelativePath
 
 
 class FileObject(object):
+    __metaclass__ = ABCMeta
 
     FILE_OBJ_FACTORY = None # set in __init__.py
 
@@ -36,4 +37,13 @@ class FileObject(object):
     def __hash__(self):
         return hash(self.path)
 
+
+    @abstractproperty
+    def is_file(self):
+        '''Is this a file object'''
+
+
+    @abstractproperty
+    def is_dir(self):
+        '''Is this a directory object'''
 

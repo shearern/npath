@@ -9,6 +9,16 @@ from FileObject import FileObject
 class File(FileObject):
 
     @property
+    def is_file(self):
+        return True
+
+
+    @property
+    def is_dir(self):
+        return False
+
+
+    @property
     def size(self):
         return os.path.getsize(str(self.path))
 

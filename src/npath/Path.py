@@ -4,9 +4,23 @@ import os
 class Path(object):
     '''Work with os.path as an object'''
 
-    def __init__(self, *parms):
-        parms = [str(p) for p in parms]
-        self.__path = os.path.join(*parms)
+    def __init__(self, *parms, **kwargs):
+        str_parms = [str(p) for p in parms]
+        self.__path = os.path.join(*str_parms)
+
+        self.__relative_to = None
+
+        # Collect relative_to off first path parm if we can
+        try:
+            self.__relative_to = parms[0].__relative_to
+        except AttributeError:
+            self.__relative_to = None
+
+        for k, v in kwargs.items():
+            if k == 'relative_to':
+                self.__relative_to = v
+            else:
+                raise Exception("Unknown keyword argument: s" % (k))
 
 
     def __str__(self):
@@ -34,8 +48,27 @@ class Path(object):
         return not self.__eq__(other)
 
 
-    def _new_path(self, path):
-        return Path(path)
+    @property
+    def rel_root(self):
+        '''The path that this path is relative to (if relative)'''
+        if self.is_relative:
+            if self.__relative_to is not None:
+                return self.__relative_to
+            else:
+                return os.path.abspath(os.curdir)
+        return None
+
+
+    @property
+    def is_relative(self):
+        if len(self.__path) > 0:
+            if self.__path[0] in ('/', '\\'):
+                return False
+            elif self.__path[1:3] in (':\\', ':/'):
+                return False
+            return True
+        return None
+
 
     @property
     def exists(self):
@@ -56,8 +89,13 @@ class Path(object):
 
     @property
     def abs(self):
-        return os.path.abspath(self.__path)
-
+        if self.is_relative:
+            if self.__relative_to is not None:
+                return Path(self.__relative_to, self.__path)
+            else:
+                return Path(os.path.abspath(self.__path))
+        else:
+            return Path(os.path.abspath(self.__path))
 
     @property
     def basename(self):
@@ -65,7 +103,7 @@ class Path(object):
 
     @property
     def parent(self):
-        return self._new_path(os.path.dirname(self.__path))
+        return Path(os.path.dirname(self.__path))
 
 
     @property
@@ -96,7 +134,7 @@ class Path(object):
 
     def join(self, *paths):
         paths = [self.__path, ] + [str(p) for p in paths]
-        return self._new_path(os.path.join(*paths))
+        return Path(os.path.join(*paths), relative_to=self.__relative_to)
 
 
     @property
@@ -133,15 +171,19 @@ class Path(object):
 
 
     def find(self):
-        for dirpath, dirnames, filenames in os.walk(self.__path):
-            for name in dirnames:
-                yield self._new_path(os.path.join(dirpath, name))
-            for name in filenames:
-                yield self._new_path(os.path.join(dirpath, name))
-
+        return self.walk()
 
     def walk(self):
-        return self.find()
+        '''
+        Return all sub directories and files recursivly
+
+        Returned paths are RelativePath
+        '''
+        for dirpath, dirnames, filenames in os.walk(self.__path):
+            for name in dirnames:
+                yield Path(os.path.join(dirpath, name))
+            for name in filenames:
+                yield Path(os.path.join(dirpath, name))
 
 
 

@@ -11,6 +11,22 @@ class Directory(FileObject):
 
 
     @property
+    def rel_root_path(self):
+        '''Return path as a RelativePath rooted here'''
+        return RelativePath(root_path = str(self.path))
+
+
+    @property
+    def is_file(self):
+        return False
+
+
+    @property
+    def is_dir(self):
+        return True
+
+
+    @property
     def parent(self):
         return self.FILE_OBJ_FACTORY(self.path.parent)
 
@@ -39,3 +55,13 @@ class Directory(FileObject):
     def walk(self):
         for path in self.path.walk():
             yield self.FILE_OBJ_FACTORY(path)
+
+
+    def find(self, files=None, dirs=None):
+        for child in self.walk():
+            if child.is_file:
+                if files is None or files is True:
+                    yield child
+            elif child.is_dir:
+                if dirs is None or dirs is True:
+                    yield child
