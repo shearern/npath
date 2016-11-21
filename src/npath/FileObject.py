@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod, abstractproperty
 
 from . import Path
-from . import RelativePath
 
 
 class FileObject(object):

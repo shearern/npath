@@ -2,7 +2,6 @@ import os
 import hashlib
 
 from .Path import Path
-from .RelativePath import RelativePath
 
 from FileObject import FileObject
 

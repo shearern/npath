@@ -1,5 +1,4 @@
 from .Path import Path
-from .RelativePath import RelativePath
 
 from FileObject import FileObject
 
@@ -51,7 +50,6 @@ class Directory(FileObject):
             yield o
 
 
-    @property
     def walk(self):
         for path in self.path.walk():
             yield self.FILE_OBJ_FACTORY(path)

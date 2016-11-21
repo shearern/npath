@@ -1,6 +1,5 @@
 
 from .Path import Path
-from .RelativePath import RelativePath
 
 from .FileObject import FileObject
 
