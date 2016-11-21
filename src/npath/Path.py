@@ -37,7 +37,7 @@ class Path(object):
         except AttributeError:
             other_path = Path(str(other)).norm
 
-        return self_path.rstrip(os.path.sep) == other_path.rstrip(os.path.sep)
+        return str(self_path).rstrip(os.path.sep) == str(other_path).rstrip(os.path.sep)
 
 
     def __hash__(self):
@@ -68,6 +68,23 @@ class Path(object):
                 return False
             return True
         return None
+
+
+    @property
+    def is_absolute(self):
+        return not self.is_relative
+
+
+    def make_relative_to(self, root):
+        '''Create a new path object which is same path relative to this'''
+        if self.is_relative:
+            raise ValueError(
+                "Can't call make_relative_to() on relative path " + str(self))
+        if not str(self).startswith(root):
+            raise ValueError("%s cannot be represented relative to %s" %(
+                self.abs, root))
+        rel_path = str(self)[len(root)+1:] # +1 to get dir sep.  Ever want otherwise?
+        return Path(rel_path, relative_to=root)
 
 
     @property
@@ -122,14 +139,14 @@ class Path(object):
         return self.splitext[1]
 
     def split(self):
-        return self.norm.split(os.sep)
+        return str(self.norm).split(os.sep)
 
     def has_ext(self, *exts):
         return self.ext.lower() in set([e.lower() for e in exts])
 
     @property
     def norm(self):
-        return os.path.normpath(self.__path)
+        return Path(os.path.normpath(self.__path))
 
 
     def join(self, *paths):

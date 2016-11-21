@@ -263,6 +263,12 @@ class TestPath(TestCase):
         self.assertFalse(Path('/a/b/c').is_relative)
 
 
+    def test_is_absolute(self):
+        self.assertFalse(Path('a/b/c').is_absolute)
+        self.assertTrue(Path('C:\\test').is_absolute)
+        self.assertTrue(Path('/a/b/c').is_absolute)
+
+
     def test_rel_root(self):
         self.assertEquals(Path('a/b/c').rel_root,
                           os.path.abspath(os.curdir))
@@ -287,3 +293,11 @@ class TestPath(TestCase):
         self.assertEquals(str(p3), os.path.normpath('site/files'))
         self.assertEquals(p3.abs, '/var/www/site/files')
         self.assertEquals(p3.rel_root, '/var/www')
+
+    def test_make_relative(self):
+
+        p = Path('/var/www/site').make_relative_to('/var/www')
+        self.assertEquals(str(p), 'site')
+        self.assertEquals(p.abs, '/var/www/site')
+        self.assertEquals(p.rel_root, '/var/www')
+
