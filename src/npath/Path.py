@@ -29,15 +29,47 @@ class Path(object):
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.__path)
 
+
+    @property
+    def _compare_str(self):
+        '''String for comparison.  See .__eq__()'''
+        if self.__relative_to is None:
+            path = str(self)
+        else:
+            path = os.path.join(str(self.__relative_to), str(self))
+
+        # Normalize path seperators
+        path = Path.normalize_path_sep(path)
+
+        return path
+
+
+    @staticmethod
+    def normalize_path_sep(path):
+        return path.replace('/', os.path.sep).replace('\\', os.path.sep)
+
+
     def __eq__(self, other):
-        self_path = self.norm
+        '''
+        Paths are equal if their string values are euqal adjusted for os.sep
 
+        So:
+          - a/b/c == a\b\c
+          - /a/b/c != a/b/c (even if both paths point to the same place)
+
+        If a path has a .rel_root value, that will be combined with the
+        string value before comparing.  So:
+
+          - 'c' relative to '/a/b' == '/a/b/c' relative to None
+
+        :param other: Another path or string
+        :return:
+        '''
         try:
-            other_path = other.norm
+            return other._compare_str == self._compare_str
         except AttributeError:
-            other_path = Path(str(other)).norm
-
-        return str(self_path).rstrip(os.path.sep) == str(other_path).rstrip(os.path.sep)
+            a = Path.normalize_path_sep(str(other))
+            return a == self._compare_str
 
 
     def __hash__(self):

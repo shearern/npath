@@ -164,15 +164,15 @@ class TestPath(TestCase):
 
         all = list(Path(td.path).find())
 
-        self.assertIn(Path("Dir 1"), all)
-        self.assertIn(Path("Dir 1", "File A.exe"), all)
-        self.assertIn(Path("Dir 1", "File B.txt"), all)
-        self.assertIn(Path("Dir 2"), all)
-        self.assertIn(Path("Dir 2", 'File C'), all)
-        self.assertIn(Path("Dir 2", 'File D.txt'), all)
-        self.assertIn(Path("test_file"), all)
-        self.assertIn(Path("Dir 2", "Dir 3"), all)
-        self.assertIn(Path("Dir 2", "Dir 3", "test_file"), all)
+        self.assertIn(Path(td.path, "Dir 1"), all)
+        self.assertIn(Path(td.path, "Dir 1", "File A.exe"), all)
+        self.assertIn(Path(td.path, "Dir 1", "File B.txt"), all)
+        self.assertIn(Path(td.path, "Dir 2"), all)
+        self.assertIn(Path(td.path, "Dir 2", 'File C'), all)
+        self.assertIn(Path(td.path, "Dir 2", 'File D.txt'), all)
+        self.assertIn(Path(td.path, "test_file"), all)
+        self.assertIn(Path(td.path, "Dir 2", "Dir 3"), all)
+        self.assertIn(Path(td.path, "Dir 2", "Dir 3", "test_file"), all)
 
         td.clean()
 
@@ -182,15 +182,15 @@ class TestPath(TestCase):
 
         all = list(Path(td.path).walk())
 
-        self.assertIn(Path("Dir 1"), all)
-        self.assertIn(Path("Dir 1", "File A.exe"), all)
-        self.assertIn(Path("Dir 1", "File B.txt"), all)
-        self.assertIn(Path("Dir 2"), all)
-        self.assertIn(Path("Dir 2", 'File C'), all)
-        self.assertIn(Path("Dir 2", 'File D.txt'), all)
-        self.assertIn(Path("test_file"), all)
-        self.assertIn(Path("Dir 2", "Dir 3"), all)
-        self.assertIn(Path("Dir 2", "Dir 3", "test_file"), all)
+        self.assertIn(Path(td.path, "Dir 1"), all)
+        self.assertIn(Path(td.path, "Dir 1", "File A.exe"), all)
+        self.assertIn(Path(td.path, "Dir 1", "File B.txt"), all)
+        self.assertIn(Path(td.path, "Dir 2"), all)
+        self.assertIn(Path(td.path, "Dir 2", 'File C'), all)
+        self.assertIn(Path(td.path, "Dir 2", 'File D.txt'), all)
+        self.assertIn(Path(td.path, "test_file"), all)
+        self.assertIn(Path(td.path, "Dir 2", "Dir 3"), all)
+        self.assertIn(Path(td.path, "Dir 2", "Dir 3", "test_file"), all)
 
         td.clean()
 
