@@ -77,13 +77,17 @@ class Path(object):
 
     def make_relative_to(self, root):
         '''Create a new path object which is same path relative to this'''
+        root = str(root)
+
         if self.is_relative:
-            raise ValueError(
-                "Can't call make_relative_to() on relative path " + str(self))
-        if not str(self).startswith(root):
+            path = str(self.abs)
+        else:
+            path = str(self)
+
+        if not path.startswith(root):
             raise ValueError("%s cannot be represented relative to %s" %(
-                self.abs, root))
-        rel_path = str(self)[len(root)+1:] # +1 to get dir sep.  Ever want otherwise?
+                path, root))
+        rel_path = path[len(root)+1:] # +1 to get dir sep.  Ever want otherwise?
         return Path(rel_path, relative_to=root)
 
 
@@ -190,17 +194,18 @@ class Path(object):
     def find(self):
         return self.walk()
 
+
     def walk(self):
         '''
         Return all sub directories and files recursivly
 
         Returned paths are RelativePath
         '''
-        for dirpath, dirnames, filenames in os.walk(self.__path):
+        for dirpath, dirnames, filenames in os.walk(str(self.abs)):
             for name in dirnames:
-                yield Path(os.path.join(dirpath, name))
+                yield Path(dirpath, name).make_relative_to(self.abs)
             for name in filenames:
-                yield Path(os.path.join(dirpath, name))
+                yield Path(dirpath, name).make_relative_to(self.abs)
 
 
 
