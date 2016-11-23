@@ -18,7 +18,8 @@ class Path(object):
 
         for k, v in kwargs.items():
             if k == 'relative_to':
-                self.__relative_to = v
+                if v is not None:
+                    self.__relative_to = Path(v)
             else:
                 raise Exception("Unknown keyword argument: s" % (k))
 
@@ -28,6 +29,15 @@ class Path(object):
 
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.__path)
+
+
+    @property
+    def effective_path_str(self):
+        '''Path being pased to os.path'''
+        if self.__relative_to is None:
+            return self.__path
+        else:
+            return os.path.join(str(self.__relative_to), self.__path)
 
 
     @property
@@ -66,7 +76,7 @@ class Path(object):
         :return:
         '''
         try:
-            return other._compare_str == self._compare_str
+             return other._compare_str == self._compare_str
         except AttributeError:
             a = Path.normalize_path_sep(str(other))
             return a == self._compare_str
@@ -111,10 +121,9 @@ class Path(object):
         '''Create a new path object which is same path relative to this'''
         root = str(root)
 
-        if self.is_relative:
-            path = str(self.abs)
-        else:
-            path = str(self)
+        path = str(self)
+        if self.__relative_to is not None:
+            path = os.path.join(str(self.__relative_to), path)
 
         if not path.startswith(root):
             raise ValueError("%s cannot be represented relative to %s" %(
@@ -125,19 +134,19 @@ class Path(object):
 
     @property
     def exists(self):
-        return os.path.exists(self.__path)
+        return os.path.exists(self.effective_path_str)
 
     @property
     def is_file(self):
-        return os.path.isfile(self.__path)
+        return os.path.isfile(self.effective_path_str)
 
     @property
     def is_dir(self):
-        return os.path.isdir(self.__path)
+        return os.path.isdir(self.effective_path_str)
 
     @property
     def is_link(self):
-        return os.path.islink(self.__path)
+        return os.path.islink(self.effective_path_str)
 
 
     @property
@@ -199,11 +208,11 @@ class Path(object):
 
 
     def list_dir(self):
-        return os.listdir(self.__path)
+        return os.listdir(self.effective_path_str)
 
     def samefile(self, other):
         try:
-            return os.path.samefile(self.__path, str(other))
+            return os.path.samefile(self.effective_path_str, str(other))
         except AttributeError:
             raise AttributeError("os.path.samefile() only available for Unix")
 
