@@ -27,8 +27,13 @@ class Path(object):
     def __str__(self):
         return self.__path
 
+    @property
+    def s(self):
+        '''Alias to __str__()'''
+        return str(self)
+
     def __repr__(self):
-        return "%s('%s')" % (self.__class__.__name__, self.__path)
+        return "Path('%s')" % (self.__path)
 
 
     @property
