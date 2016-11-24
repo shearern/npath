@@ -12,6 +12,11 @@ class FileObject(Path):
     def __repr__(self):
         return "%s('%s')" % (self.__class__.__name__, self.__path)
 
+    @property
+    def path(self):
+        '''Return path to file object as a Path (not normally needed)'''
+        return Path(self)
+
 
     @abstractproperty
     def is_file(self):
