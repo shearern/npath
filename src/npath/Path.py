@@ -229,6 +229,12 @@ class Path(object):
                 yield child
 
 
+    def startswith(self, path):
+        path_parts = Path(path).split()
+        my_parts = self.split()
+        return my_parts[:len(path_parts)] == path_parts
+
+
     @property
     def files(self):
         for name in self.list_dir():
