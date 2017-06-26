@@ -3,6 +3,9 @@ npath - Nate's Path Library
 
 **Work with os.path as Path objects.**
 
+**NOTE:** For Python >= 3.4, you almost certainly want
+[pathlib](https://docs.python.org/3/library/pathlib.html)
+
 It seems like 50% of my development time is spent working with file paths.
 This library is intended to make much of that path work a bit cleaner
 by baking some of my common usage patterns of
