@@ -93,8 +93,8 @@ class TestPath(TestCase):
             Path('a/b'): 2,
         }
 
-        self.assertTrue(d.has_key(Path('a/b')))
-        self.assertFalse(d.has_key(Path('a/b/c/d')))
+        self.assertTrue(Path('a/b') in d)
+        self.assertFalse(Path('a/b/c/d') in d)
 
         self.assertEqual(d[Path('a/b/c')], 1)
         self.assertEqual(d[Path('a/b')], 2)
@@ -270,7 +270,7 @@ class TestPath(TestCase):
 
 
     def test_rel_root(self):
-        self.assertEquals(Path('a/b/c').rel_root,
+        self.assertEqual(Path('a/b/c').rel_root,
                           os.path.abspath(os.curdir))
         self.assertIsNone(Path('/a/b/c').rel_root)
         self.assertIsNone(Path('c:\\a\\b\\c').rel_root)
@@ -279,25 +279,25 @@ class TestPath(TestCase):
     def test_rel_path(self):
 
         p = Path('site', relative_to='/var/www')
-        self.assertEquals(str(p), 'site')
-        self.assertEquals(p.abs, '/var/www/site')
-        self.assertEquals(p.rel_root, '/var/www')
+        self.assertEqual(str(p), 'site')
+        self.assertEqual(p.abs, '/var/www/site')
+        self.assertEqual(p.rel_root, '/var/www')
 
         p2 = p.join('drupal')
-        self.assertEquals(os.path.normpath(str(p2)),
+        self.assertEqual(os.path.normpath(str(p2)),
                           os.path.normpath('site/drupal'))
-        self.assertEquals(p2.abs, os.path.normpath('/var/www/site/drupal'))
-        self.assertEquals(p2.rel_root, '/var/www')
+        self.assertEqual(p2.abs, os.path.normpath('/var/www/site/drupal'))
+        self.assertEqual(p2.rel_root, '/var/www')
 
         p3 = Path(p, 'files')
-        self.assertEquals(str(p3), os.path.normpath('site/files'))
-        self.assertEquals(p3.abs, '/var/www/site/files')
-        self.assertEquals(p3.rel_root, '/var/www')
+        self.assertEqual(str(p3), os.path.normpath('site/files'))
+        self.assertEqual(p3.abs, '/var/www/site/files')
+        self.assertEqual(p3.rel_root, '/var/www')
 
     def test_make_relative(self):
 
         p = Path('/var/www/site').make_relative_to('/var/www')
-        self.assertEquals(str(p), 'site')
-        self.assertEquals(p.abs, '/var/www/site')
-        self.assertEquals(p.rel_root, '/var/www')
+        self.assertEqual(str(p), 'site')
+        self.assertEqual(p.abs, '/var/www/site')
+        self.assertEqual(p.rel_root, '/var/www')
 
