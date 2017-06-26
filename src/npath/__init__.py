@@ -1,9 +1,9 @@
-from Path import Path
+from .Path import Path
 
-from FileObject import FileObject
-from File import File
-from Directory import Directory
-from InvalidFileObject import InvalidFileObject
+from .FileObject import FileObject
+from .File import File
+from .Directory import Directory
+from .InvalidFileObject import InvalidFileObject
 
 def file_object_factory(creator, *path_parts):
 

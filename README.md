@@ -1,7 +1,7 @@
-npath
-=====
+npath - Nate's Path Library
+===========================
 
-Work with os.path as Path objects.
+**Work with os.path as Path objects.**
 
 It seems like 50% of my development time is spent working with file paths.
 This library is intended to make much of that path work a bit cleaner
@@ -9,6 +9,9 @@ by baking some of my common usage patterns of
 [os.path](https://docs.python.org/2/library/os.path.html) right into the 
 Path objects.  I'll also change a few of the names to ones that
 I can remember easier.
+
+Compatible with Python 2 and Python 3
+(Tested with 2.7.10 and 3.3.2).
 
 
 Key Classes
@@ -72,7 +75,7 @@ Listing the files and directories in a directory
         print(str(fobj))
 
 
-Recursivly walk over all sub files and sub directroies of a path
+Recursively walk over all sub files and sub directories of a path
 
     for fobj in Directory('/usr/share/man').walk():
         if fobj.is_file:
@@ -103,6 +106,56 @@ Opening a file in a directory
 |                                            |                                           |                                                              |
 | Get file size                              | os.path.getsize('my/path')                | File('my/path').size                                         |
 | Get file MD5 sum                           | Use hashlib                               | File('my/path').md5                                          |
+
+
+Path Comparisons
+----------------
+
+All path comparisons will work between Path objects (which includes
+Directory, File, FileObject, and InvalidFileObject) and strings.  Though,
+the Path object must be on the left.
+
+These work:
+    
+    Path('a/b/c') == 'a/b/c'
+    File('a/b/c') == 'a/b/c'
+    Path('a/b/c') == File('a/b/c')
+
+But, this will not:
+
+    'a/b/c' == Path('a/b/c')
+    
+
+A Note on "Relative To" Paths
+-----------------------------
+
+One of the needs I often have is to work with a set of paths that are
+all relative to a single parent path.  For example, if I'm listing all
+of the files under /usr/share/man/en, it may matter to me to remember
+that all of those paths are under /usr/share/man/en, even though I want
+to work with the relative paths (e.g.: man1/whatis.1.gz).  To support
+this need, I've added functionality to the Path object to note hold that
+common parent path as an attribute.
+
+    path = Path('man1/whatis.1.gz', relative_to='/usr/share/man/en')
+    
+    str(path) == 'man1/whatis.1.gz'                         # True
+    str(path.rel_root) == '/usr/share/man/en'               # True
+    str(path.abs) == '/usr/share/man/en/man1/whatis.1.gz'   # True
+    
+As paths are manipulated (such as joined), they will retain that
+relative root whenever it makes sense.
+    
+    path = Path('man1', relative_to='/usr/share/man/en')
+    str( path.join('whatis.1.gz') ) == '/usr/share/man/en/man1/whatis.1.gz'
+    
+Also, all the path generators will retain the relative root of their
+constructing/parent object.
+
+    for fl in Directory('man1', relative_to='/usr/share/man/en').files:
+        assert(fl.rel_root) == '/usr/share/man/en'
+
+
 
 Change Log
 ----------

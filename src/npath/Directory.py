@@ -1,6 +1,6 @@
 from .Path import Path
 
-from FileObject import FileObject
+from .FileObject import FileObject
 
 class Directory(FileObject):
 

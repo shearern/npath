@@ -16,7 +16,7 @@ class Path(object):
         except AttributeError:
             self.__relative_to = None
 
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             if k == 'relative_to':
                 if v is not None:
                     self.__relative_to = Path(v)
@@ -66,7 +66,7 @@ class Path(object):
 
     def __eq__(self, other):
         '''
-        Paths are equal if their string values are euqal adjusted for os.sep
+        Paths are equal if their string values are equal adjusted for os.sep
 
         So:
           - a/b/c == a\b\c
@@ -220,6 +220,10 @@ class Path(object):
             return os.path.samefile(self.effective_path_str, str(other))
         except AttributeError:
             raise AttributeError("os.path.samefile() only available for Unix")
+        except FileNotFoundError:
+            # Keeping this behaviour since I think this is how Python 2 worked.
+            # May let this exception bubble up in the future if file doesn't exist
+            return False
 
     @property
     def dirs(self):
