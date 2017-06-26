@@ -66,7 +66,7 @@ class Path(object):
 
     def __eq__(self, other):
         '''
-        Paths are equal if their string values are euqal adjusted for os.sep
+        Paths are equal if their string values are equal adjusted for os.sep
 
         So:
           - a/b/c == a\b\c
