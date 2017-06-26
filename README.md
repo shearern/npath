@@ -10,6 +10,9 @@ by baking some of my common usage patterns of
 Path objects.  I'll also change a few of the names to ones that
 I can remember easier.
 
+Compatible with Python 2 and Python 3
+(Tested with 2.7.10 and 3.3.2).
+
 
 Key Classes
 -----------
