@@ -3,7 +3,7 @@ from abc import ABCMeta, abstractmethod, abstractproperty
 from . import Path
 
 
-class FileObject(Path, metaclass=ABCMeta):
+class FileObject(Path):
     FILE_OBJ_FACTORY = None # set in __init__.py
 
 
