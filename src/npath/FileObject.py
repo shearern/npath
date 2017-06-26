@@ -27,3 +27,14 @@ class FileObject(Path):
     def is_dir(self):
         '''Is this a directory object'''
 
+
+    @property
+    def isfile(self):
+        return self.is_file
+
+
+    @property
+    def isdir(self):
+        return self.is_dir
+
+
