@@ -89,6 +89,21 @@ Opening a file in a directory
     fh.close()
 
 
+|                                            | os                                        | npath                                                        |
+|--------------------------------------------|-------------------------------------------|--------------------------------------------------------------|
+| Base portion of path                       | os.path.basename('my/path')               | Path('my/path').basename                                     |
+| Parent portion of path                     | N/A                                       | Path('my/path/to').parent == Path('my/path')                 |
+| Absolute path                              | os.path.abspath('my/path')                | Path('my/path').abs                                          |
+| Normalized path                            | os.path.normpath('my/path')               | Path('my/path').norm                                         |
+| Get file extension                         | os.path.splitext('my/path/myfile.txt')[0] | Path('my/path/myfile.txt') Note: Doesn't include leading '.' |
+| Does the path point to an existing object? | os.path.exists('my/path')                 | Path('my/path').exists                                       |
+| Does path point to a file?                 | os.path.isfile('my/path')                 | Path('my/path').is_file                                      |
+| Does path point to a directory?            | os.path.isdir('my/path')                  | Path('my/path').is_dir                                       |
+| Does path point to a link?                 | os.path.islink('my/path')                 | Path('my/path').is_link                                      |
+|                                            |                                           |                                                              |
+| Get file size                              | os.path.getsize('my/path')                | File('my/path').size                                         |
+| Get file MD5 sum                           | Use hashlib                               | File('my/path').md5                                          |
+
 Change Log
 ----------
 
