@@ -3,7 +3,7 @@ npath
 
 Work with os.path as Path objects.
 
-It seems like 50% of my development time is spend working with file paths.
+It seems like 50% of my development time is spent working with file paths.
 This library is intended to make much of that path work a bit cleaner
 by baking some of my common usage patterns of
 [os.path](https://docs.python.org/2/library/os.path.html) right into the 
