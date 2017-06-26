@@ -44,5 +44,5 @@ class TestFile(TestCase):
 
     def test_size(self):
         td = TempDirectory()
-        self.assertEquals(File(td.path, 'test_file').size, 4)
+        self.assertEqual(File(td.path, 'test_file').size, 4)
         td.clean()

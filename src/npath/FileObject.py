@@ -4,8 +4,6 @@ from . import Path
 
 
 class FileObject(Path):
-    __metaclass__ = ABCMeta
-
     FILE_OBJ_FACTORY = None # set in __init__.py
 
 
