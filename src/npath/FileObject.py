@@ -36,3 +36,8 @@ class FileObject(Path):
         return self.is_dir
 
 
+    def _create_file_object(self, path):
+        '''Encapsulate a path or FileObject into a new file object'''
+        self.FILE_OBJ_FACTORY(path)
+
+

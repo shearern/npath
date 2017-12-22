@@ -17,19 +17,19 @@ class Directory(FileObject):
 
     @property
     def parent(self):
-        return self.FILE_OBJ_FACTORY(self.parent)
+        return self._create_file_object(self.parent)
 
 
     @property
     def files(self):
         for path in self.files:
-            yield self.FILE_OBJ_FACTORY(path)
+            yield self._create_file_object(path)
 
 
     @property
     def dirs(self):
         for path in self.dirs:
-            yield self.FILE_OBJ_FACTORY(path)
+            yield self._create_file_object(path)
 
 
     @property
@@ -49,7 +49,7 @@ class Directory(FileObject):
         :return: FileObject (File, Directory, UnknownFileObject)
         '''
         for path in super(Directory, self).walk():
-            yield self.FILE_OBJ_FACTORY(path.make_relative_to(self))
+            yield self._create_file_object(path.make_relative_to(self))
 
 
     def find(self, files=None, dirs=None):

@@ -51,6 +51,6 @@ class File(FileObject):
 
     @property
     def parent(self):
-        return self.FILE_OBJ_FACTORY(self.path.parent)
+        return self._create_file_object(self.path.parent)
 
 

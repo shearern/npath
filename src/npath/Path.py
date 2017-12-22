@@ -4,15 +4,15 @@ import os
 class Path(object):
     '''Work with os.path as an object'''
 
-    def __init__(self, *parms, **kwargs):
-        str_parms = [str(p) for p in parms]
-        self.__path = os.path.join(*str_parms)
+    def __init__(self, *path, **kwargs):
+        str_path = [str(p) for p in path]
+        self.__path = os.path.join(*str_path)
 
         self.__relative_to = None
 
         # Collect relative_to off first path parm if we can
         try:
-            self.__relative_to = parms[0].__relative_to
+            self.__relative_to = path[0].__relative_to
         except AttributeError:
             self.__relative_to = None
 
